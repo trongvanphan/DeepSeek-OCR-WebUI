@@ -87,6 +87,52 @@ const translations = {
             linkChangelog: '📝 更新日志',
             madeWith: 'Made with ❤️ by',
             poweredBy: 'Powered by DeepSeek-OCR'
+        },
+        
+        // Log messages
+        logMessages: {
+            'systemInit': '系统初始化',
+            'modeSwitch': '切换模式',
+            'modeChanged': '切换识别模式',
+            'uploadFailed': '文件上传失败',
+            'filesIgnored': '部分文件已忽略',
+            'uploadStarted': '开始上传图片',
+            'uploadComplete': '图片上传完成',
+            'imageLoadFailed': '图片加载失败',
+            'pdfConversionStarted': 'PDF 转换开始',
+            'pdfConverting': 'PDF 转换进度',
+            'pdfConversionComplete': 'PDF 转换完成',
+            'pdfConversionFailed': 'PDF 转换失败',
+            'dragStarted': '开始拖动图片',
+            'orderChanged': '图片顺序已调整',
+            'imageUploaded': '图片上传成功',
+            'imagesCleared': '清空图片',
+            'cannotStart': '无法开始识别',
+            'batchRecognitionStarted': '开始批量识别',
+            'processingImage': '识别图片',
+            'recognitionSuccess': '✓ 识别成功',
+            'recognitionFailed': '✗ 识别失败',
+            'batchComplete': '批量识别完成',
+            'findStarted': '开始查找定位',
+            'findSuccess': '✓ 查找定位成功',
+            'findComplete': '查找完成',
+            'findFailed': '✗ 查找失败',
+            'copyFailed': '复制操作失败',
+            'copiedToClipboard': '复制到剪贴板',
+            'downloadFailed': '下载操作失败',
+            'downloaded': '下载识别结果',
+            'queueCleared': '清空队列',
+            'formatNotSupported': '文件格式不支持',
+            'pdfConverted': 'PDF 转换成功',
+            'findModeReset': '重置 Find 模式'
+        },
+        
+        // Log types
+        logTypes: {
+            'info': '信息',
+            'success': '成功',
+            'warning': '警告',
+            'error': '错误'
         }
     },
     
@@ -164,6 +210,52 @@ const translations = {
             linkChangelog: '📝 更新日誌',
             madeWith: 'Made with ❤️ by',
             poweredBy: 'Powered by DeepSeek-OCR'
+        },
+        
+        // Log messages
+        logMessages: {
+            'systemInit': '系統初始化',
+            'modeSwitch': '切換模式',
+            'modeChanged': '切換識別模式',
+            'uploadFailed': '文件上傳失敗',
+            'filesIgnored': '部分文件已忽略',
+            'uploadStarted': '開始上傳圖片',
+            'uploadComplete': '圖片上傳完成',
+            'imageLoadFailed': '圖片加載失敗',
+            'pdfConversionStarted': 'PDF 轉換開始',
+            'pdfConverting': 'PDF 轉換進度',
+            'pdfConversionComplete': 'PDF 轉換完成',
+            'pdfConversionFailed': 'PDF 轉換失敗',
+            'dragStarted': '開始拖動圖片',
+            'orderChanged': '圖片順序已調整',
+            'imageUploaded': '圖片上傳成功',
+            'imagesCleared': '清空圖片',
+            'cannotStart': '無法開始識別',
+            'batchRecognitionStarted': '開始批量識別',
+            'processingImage': '識別圖片',
+            'recognitionSuccess': '✓ 識別成功',
+            'recognitionFailed': '✗ 識別失敗',
+            'batchComplete': '批量識別完成',
+            'findStarted': '開始查找定位',
+            'findSuccess': '✓ 查找定位成功',
+            'findComplete': '查找完成',
+            'findFailed': '✗ 查找失敗',
+            'copyFailed': '複製操作失敗',
+            'copiedToClipboard': '複製到剪貼板',
+            'downloadFailed': '下載操作失敗',
+            'downloaded': '下載識別結果',
+            'queueCleared': '清空隊列',
+            'formatNotSupported': '文件格式不支持',
+            'pdfConverted': 'PDF 轉換成功',
+            'findModeReset': '重置 Find 模式'
+        },
+        
+        // Log types
+        logTypes: {
+            'info': '信息',
+            'success': '成功',
+            'warning': '警告',
+            'error': '錯誤'
         }
     },
     
@@ -241,6 +333,182 @@ const translations = {
             linkChangelog: '📝 Changelog',
             madeWith: 'Made with ❤️ by',
             poweredBy: 'Powered by DeepSeek-OCR'
+        },
+        
+        // Log messages
+        logMessages: {
+            'systemInit': 'System Init',
+            'modeSwitch': 'Mode Switch',
+            'modeChanged': 'Mode Changed',
+            'uploadFailed': 'Upload Failed',
+            'filesIgnored': 'Files Ignored',
+            'uploadStarted': 'Upload Started',
+            'uploadComplete': 'Upload Complete',
+            'imageLoadFailed': 'Image Load Failed',
+            'pdfConversionStarted': 'PDF Conversion Started',
+            'pdfConverting': 'PDF Converting',
+            'pdfConversionComplete': 'PDF Conversion Complete',
+            'pdfConversionFailed': 'PDF Conversion Failed',
+            'dragStarted': 'Drag Started',
+            'orderChanged': 'Order Changed',
+            'imageUploaded': 'Image Uploaded',
+            'imagesCleared': 'Images Cleared',
+            'cannotStart': 'Cannot Start',
+            'batchRecognitionStarted': 'Batch Recognition Started',
+            'processingImage': 'Processing Image',
+            'recognitionSuccess': '✓ Success',
+            'recognitionFailed': '✗ Failed',
+            'batchComplete': 'Batch Complete',
+            'findStarted': 'Find Started',
+            'findSuccess': '✓ Find Success',
+            'findComplete': 'Find Complete',
+            'findFailed': '✗ Find Failed',
+            'copyFailed': 'Copy Failed',
+            'copiedToClipboard': 'Copied to Clipboard',
+            'downloadFailed': 'Download Failed',
+            'downloaded': 'Downloaded',
+            'queueCleared': 'Queue Cleared',
+            'formatNotSupported': 'Format Not Supported',
+            'pdfConverted': 'PDF Converted',
+            'findModeReset': 'Find Mode Reset'
+        },
+        
+        // Log types
+        logTypes: {
+            'info': 'INFO',
+            'success': 'SUCCESS',
+            'warning': 'WARNING',
+            'error': 'ERROR'
+        }
+    },
+    
+    'en-US': {
+        // Header
+        headerSubtitle: 'Intelligent Image Recognition · Batch Processing · Multi-Mode Support',
+        
+        // Mode selection
+        modeTitle: 'Select Recognition Mode (Enhanced: Find & Freeform Added)',
+        modes: {
+            document: 'Document to Markdown',
+            ocr: 'General OCR',
+            free: 'Plain Text Extraction',
+            figure: 'Chart Analysis',
+            describe: 'Image Description',
+            find: 'Find & Locate',
+            freeform: 'Custom Prompt'
+        },
+        
+        // Find Mode
+        findMode: {
+            title: 'Find & Locate',
+            uploadText: 'Click or drag to upload image',
+            uploadHint: 'Supports JPG, PNG, JPEG, BMP, GIF',
+            inputLabel: 'Enter search term',
+            inputPlaceholder: 'e.g.: Total, Invoice #, Amount, Name',
+            inputHint: 'Enter the text you want to find in the image, the system will automatically locate it',
+            btnProcess: 'Start Search',
+            btnChange: 'Change Image',
+            btnClear: 'Clear & Reset',
+            resultTitle: 'Recognition Results',
+            emptyText: 'Waiting for recognition',
+            emptyHint: 'Upload an image and enter a search term, then click "Start Search"',
+            matchesTitle: 'Matches Found',
+            statsFound: 'Found',
+            statsItems: 'matches',
+            searchTerm: 'Search term:',
+            noMatch: 'No matches found'
+        },
+        
+        // Batch Mode
+        batchMode: {
+            freeformLabel: 'Custom Prompt',
+            freeformPlaceholder: 'Enter custom prompt (e.g.: Extract all dates and amounts)',
+            freeformHint: 'Describe the recognition effect you want, AI will process each image according to your requirements',
+            uploadTitle: 'Upload Images',
+            uploadText: 'Click or drag to upload images',
+            uploadHint: 'Supports batch upload of multiple images',
+            imagesTitle: 'Uploaded Images',
+            imagesDragHint: 'Drag to adjust order',
+            btnProcess: 'Start Recognition',
+            btnAddMore: 'Add More',
+            btnClear: 'Clear All',
+            progressTitle: 'Recognition Progress',
+            processed: 'Processed:',
+            total: 'Total:',
+            resultTitle: 'Recognition Results',
+            btnCopy: 'Copy Text',
+            btnDownload: 'Download',
+            logTitle: 'Operation Log',
+            logCount: 'Total',
+            logRecords: 'records'
+        },
+        toast: {
+            uploadSuccess: 'Upload successful',
+            uploadError: 'Upload failed',
+            copySuccess: 'Copied to clipboard',
+            copyError: 'Copy failed',
+            clearSuccess: 'Cleared',
+            processing: 'Processing...',
+            completed: 'Recognition completed'
+        },
+        
+        github: {
+            starButton: '⭐ Star on GitHub',
+            bannerTitle: '⭐ Like this project? Give it a star! ⭐',
+            bannerDesc: 'If this project is helpful to you, please support us by giving it a star on GitHub!',
+            bannerButton: '⭐ Star on GitHub',
+            linkHome: '🏠 Home',
+            linkIssues: '🐛 Report Issue',
+            linkDocs: '📖 Documentation',
+            linkChangelog: '📝 Changelog',
+            madeWith: 'Made with ❤️ by',
+            poweredBy: 'Powered by DeepSeek-OCR'
+        },
+        
+        // Log messages
+        logMessages: {
+            'systemInit': 'System Init',
+            'modeSwitch': 'Mode Switch',
+            'modeChanged': 'Mode Changed',
+            'uploadFailed': 'Upload Failed',
+            'filesIgnored': 'Files Ignored',
+            'uploadStarted': 'Upload Started',
+            'uploadComplete': 'Upload Complete',
+            'imageLoadFailed': 'Image Load Failed',
+            'pdfConversionStarted': 'PDF Conversion Started',
+            'pdfConverting': 'PDF Converting',
+            'pdfConversionComplete': 'PDF Conversion Complete',
+            'pdfConversionFailed': 'PDF Conversion Failed',
+            'dragStarted': 'Drag Started',
+            'orderChanged': 'Order Changed',
+            'imageUploaded': 'Image Uploaded',
+            'imagesCleared': 'Images Cleared',
+            'cannotStart': 'Cannot Start',
+            'batchRecognitionStarted': 'Batch Recognition Started',
+            'processingImage': 'Processing Image',
+            'recognitionSuccess': '✓ Success',
+            'recognitionFailed': '✗ Failed',
+            'batchComplete': 'Batch Complete',
+            'findStarted': 'Find Started',
+            'findSuccess': '✓ Find Success',
+            'findComplete': 'Find Complete',
+            'findFailed': '✗ Find Failed',
+            'copyFailed': 'Copy Failed',
+            'copiedToClipboard': 'Copied to Clipboard',
+            'downloadFailed': 'Download Failed',
+            'downloaded': 'Downloaded',
+            'queueCleared': 'Queue Cleared',
+            'formatNotSupported': 'Format Not Supported',
+            'pdfConverted': 'PDF Converted',
+            'findModeReset': 'Find Mode Reset'
+        },
+        
+        // Log types
+        logTypes: {
+            'info': 'INFO',
+            'success': 'SUCCESS',
+            'warning': 'WARNING',
+            'error': 'ERROR'
         }
     },
     
@@ -318,6 +586,52 @@ const translations = {
             linkChangelog: '📝 更新履歴',
             madeWith: 'Made with ❤️ by',
             poweredBy: 'Powered by DeepSeek-OCR'
+        },
+        
+        // Log messages
+        logMessages: {
+            'systemInit': 'システム初期化',
+            'modeSwitch': 'モード切替',
+            'modeChanged': '認識モードを切替',
+            'uploadFailed': 'ファイルアップロード失敗',
+            'filesIgnored': '一部のファイルを無視',
+            'uploadStarted': '画像アップロード開始',
+            'uploadComplete': '画像アップロード完了',
+            'imageLoadFailed': '画像読込失敗',
+            'pdfConversionStarted': 'PDF変換開始',
+            'pdfConverting': 'PDF変換進行中',
+            'pdfConversionComplete': 'PDF変換完了',
+            'pdfConversionFailed': 'PDF変換失敗',
+            'dragStarted': '画像ドラッグ開始',
+            'orderChanged': '画像順序を調整',
+            'imageUploaded': '画像アップロード成功',
+            'imagesCleared': '画像をクリア',
+            'cannotStart': '認識を開始できません',
+            'batchRecognitionStarted': 'バッチ認識開始',
+            'processingImage': '画像認識中',
+            'recognitionSuccess': '✓ 認識成功',
+            'recognitionFailed': '✗ 認識失敗',
+            'batchComplete': 'バッチ認識完了',
+            'findStarted': '検索定位開始',
+            'findSuccess': '✓ 検索定位成功',
+            'findComplete': '検索完了',
+            'findFailed': '✗ 検索失敗',
+            'copyFailed': 'コピー操作失敗',
+            'copiedToClipboard': 'クリップボードにコピー',
+            'downloadFailed': 'ダウンロード操作失敗',
+            'downloaded': '認識結果をダウンロード',
+            'queueCleared': 'キューをクリア',
+            'formatNotSupported': 'ファイル形式非サポート',
+            'pdfConverted': 'PDF変換成功',
+            'findModeReset': 'Findモードをリセット'
+        },
+        
+        // Log types
+        logTypes: {
+            'info': '情報',
+            'success': '成功',
+            'warning': '警告',
+            'error': 'エラー'
         }
     }
 };

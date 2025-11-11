@@ -543,7 +543,6 @@
             min-height: 400px;
             display: flex;
             align-items: center;
-            justify-center;
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -1554,427 +1553,34 @@
         <span class="toast-message" id="toastMessage">操作成功</span>
     </div>
 
+    <!-- Load i18n translations -->
+    <script src="i18n.js"></script>
+    
     <script>
         // ====================================
-        // Internationalization (i18n)
+        // Using external i18n.js for translations
+        // i18n functions: t(), switchLanguage(), updateUILanguage(), initI18n()
         // ====================================
-        const translations = {
-            'zh-CN': {
-                headerSubtitle: '智能图像识别 · 批量处理 · 多模式支持 · 支持 Apple Silicon',
-                modeTitle: '选择识别模式（增强版：新增 Find 和 Freeform）',
-                modes: {
-                    document: '文档转Markdown',
-                    ocr: '通用OCR',
-                    free: '纯文本提取',
-                    figure: '图表解析',
-                    describe: '图像描述',
-                    find: '查找定位',
-                    freeform: '自定义提示'
-                },
-                findMode: {
-                    title: '查找定位',
-                    uploadText: '点击或拖拽上传图片',
-                    uploadHint: '支持 JPG, PNG, JPEG, BMP, GIF',
-                    inputLabel: '输入查找内容',
-                    inputPlaceholder: '例如：Total, Invoice #, 金额, 姓名',
-                    inputHint: '输入图片中需要查找的文字，系统会自动定位并标注',
-                    btnProcess: '开始查找',
-                    btnChange: '更换图片',
-                    btnClear: '清空重置',
-                    resultTitle: '识别结果',
-                    emptyText: '等待识别',
-                    emptyHint: '上传图片并输入查找词，点击"开始查找"即可',
-                    matchesTitle: '找到的匹配项'
-                },
-                batchMode: {
-                    uploadText: '拖拽图片或 PDF 到这里或点击上传',
-                    uploadHint: '支持多张图片批量上传，PDF 会自动转换为图片，可调整处理顺序',
-                    freeformLabel: '自定义提示词',
-                    freeformPlaceholder: '输入自定义提示词（如：提取所有日期和金额）',
-                    freeformHint: '描述你想要的识别效果，AI 会按照你的要求处理每张图片',
-                    imagesTitle: '已上传图片',
-                    imagesDragHint: '拖动图片可调整顺序',
-                    btnProcess: '开始识别',
-                    btnAddMore: '继续添加',
-                    btnClear: '清空全部',
-                    progressTitle: '识别进度',
-                    processed: '已处理:',
-                    total: '总计:',
-                    resultTitle: '识别结果',
-                    btnCopy: '复制文本',
-                    btnDownload: '下载文本',
-                    logTitle: '操作日志',
-                    logCount: '共',
-                    logRecords: '条记录'
-                },
-                logTypes: {
-                    success: '成功',
-                    error: '错误',
-                    warning: '警告',
-                    info: '信息'
-                },
-                github: {
-                    starButton: '⭐ Star on GitHub',
-                    bannerTitle: '⭐ 喜欢这个项目？给我们一个 Star！⭐',
-                    bannerDesc: '如果这个项目对你有帮助，请在 GitHub 上给我们一个 Star 支持一下！',
-                    bannerButton: '⭐ 在 GitHub 上给我们 Star',
-                    linkHome: '🏠 项目主页',
-                    linkIssues: '🐛 问题反馈',
-                    linkDocs: '📖 使用文档',
-                    linkChangelog: '📝 更新日志',
-                    madeWith: 'Made with ❤️ by',
-                    poweredBy: 'Powered by DeepSeek-OCR'
-                }
-            },
-            'zh-TW': {
-                headerSubtitle: '智能圖像識別 · 批量處理 · 多模式支援 · 支援 Apple Silicon',
-                modeTitle: '選擇識別模式（增強版：新增 Find 和 Freeform）',
-                modes: {
-                    document: '文檔轉Markdown',
-                    ocr: '通用OCR',
-                    free: '純文本提取',
-                    figure: '圖表解析',
-                    describe: '圖像描述',
-                    find: '查找定位',
-                    freeform: '自定義提示'
-                },
-                findMode: {
-                    title: '查找定位',
-                    uploadText: '點擊或拖拽上傳圖片',
-                    uploadHint: '支援 JPG, PNG, JPEG, BMP, GIF',
-                    inputLabel: '輸入查找內容',
-                    inputPlaceholder: '例如：Total, Invoice #, 金額, 姓名',
-                    inputHint: '輸入圖片中需要查找的文字，系統會自動定位並標註',
-                    btnProcess: '開始查找',
-                    btnChange: '更換圖片',
-                    btnClear: '清空重置',
-                    resultTitle: '識別結果',
-                    emptyText: '等待識別',
-                    emptyHint: '上傳圖片並輸入查找詞，點擊"開始查找"即可',
-                    matchesTitle: '找到的匹配項'
-                },
-                batchMode: {
-                    uploadText: '拖拽圖片或 PDF 到這裡或點擊上傳',
-                    uploadHint: '支援多張圖片批量上傳，PDF 會自動轉換為圖片，可調整處理順序',
-                    freeformLabel: '自定義提示詞',
-                    freeformPlaceholder: '輸入自定義提示詞（如：提取所有日期和金額）',
-                    freeformHint: '描述你想要的識別效果，AI 會按照你的要求處理每張圖片',
-                    imagesTitle: '已上傳圖片',
-                    imagesDragHint: '拖動圖片可調整順序',
-                    btnProcess: '開始識別',
-                    btnAddMore: '繼續添加',
-                    btnClear: '清空全部',
-                    progressTitle: '識別進度',
-                    processed: '已處理:',
-                    total: '總計:',
-                    resultTitle: '識別結果',
-                    btnCopy: '複製文本',
-                    btnDownload: '下載文本',
-                    logTitle: '操作日誌',
-                    logCount: '共',
-                    logRecords: '條記錄'
-                },
-                logTypes: {
-                    success: '成功',
-                    error: '錯誤',
-                    warning: '警告',
-                    info: '資訊'
-                },
-                github: {
-                    starButton: '⭐ Star on GitHub',
-                    bannerTitle: '⭐ 喜歡這個項目？給我們一個 Star！⭐',
-                    bannerDesc: '如果這個項目對你有幫助，請在 GitHub 上給我們一個 Star 支持一下！',
-                    bannerButton: '⭐ 在 GitHub 上給我們 Star',
-                    linkHome: '🏠 項目主頁',
-                    linkIssues: '🐛 問題反饋',
-                    linkDocs: '📖 使用文檔',
-                    linkChangelog: '📝 更新日誌',
-                    madeWith: 'Made with ❤️ by',
-                    poweredBy: 'Powered by DeepSeek-OCR'
-                }
-            },
-            'en-US': {
-                headerSubtitle: 'Intelligent Image Recognition · Batch Processing · Multi-Mode Support · Apple Silicon Ready',
-                modeTitle: 'Select Recognition Mode (Enhanced: New Find & Freeform)',
-                modes: {
-                    document: 'Doc to Markdown',
-                    ocr: 'General OCR',
-                    free: 'Plain Text',
-                    figure: 'Chart Parser',
-                    describe: 'Image Description',
-                    find: 'Find & Locate',
-                    freeform: 'Custom Prompt'
-                },
-                findMode: {
-                    title: 'Find & Locate',
-                    uploadText: 'Click or drag to upload image',
-                    uploadHint: 'Support JPG, PNG, JPEG, BMP, GIF',
-                    inputLabel: 'Enter search term',
-                    inputPlaceholder: 'e.g.: Total, Invoice #, Amount, Name',
-                    inputHint: 'Enter text to find in image, system will locate automatically',
-                    btnProcess: 'Start Search',
-                    btnChange: 'Change Image',
-                    btnClear: 'Clear & Reset',
-                    resultTitle: 'Recognition Result',
-                    emptyText: 'Waiting',
-                    emptyHint: 'Upload image and enter search term, then click "Start Search"',
-                    matchesTitle: 'Found Matches'
-                },
-                batchMode: {
-                    uploadText: 'Drag images or PDF here or click to upload',
-                    uploadHint: 'Support batch upload, PDF auto-converts to images, reorder as needed',
-                    freeformLabel: 'Custom Prompt',
-                    freeformPlaceholder: 'Enter custom prompt (e.g.: Extract all dates and amounts)',
-                    freeformHint: 'Describe what you want, AI will process each image accordingly',
-                    imagesTitle: 'Uploaded Images',
-                    imagesDragHint: 'Drag to reorder',
-                    btnProcess: 'Start Recognition',
-                    btnAddMore: 'Add More',
-                    btnClear: 'Clear All',
-                    progressTitle: 'Progress',
-                    processed: 'Processed:',
-                    total: 'Total:',
-                    resultTitle: 'Result',
-                    btnCopy: 'Copy Text',
-                    btnDownload: 'Download',
-                    logTitle: 'Operation Log',
-                    logCount: 'Total',
-                    logRecords: 'records'
-                },
-                logTypes: {
-                    success: 'Success',
-                    error: 'Error',
-                    warning: 'Warning',
-                    info: 'Info'
-                },
-                github: {
-                    starButton: '⭐ Star on GitHub',
-                    bannerTitle: '⭐ Like this project? Give us a Star! ⭐',
-                    bannerDesc: 'If this project helps you, please give us a Star on GitHub!',
-                    bannerButton: '⭐ Star us on GitHub',
-                    linkHome: '🏠 Home',
-                    linkIssues: '🐛 Issues',
-                    linkDocs: '📖 Documentation',
-                    linkChangelog: '📝 Changelog',
-                    madeWith: 'Made with ❤️ by',
-                    poweredBy: 'Powered by DeepSeek-OCR'
-                }
-            },
-            'ja-JP': {
-                headerSubtitle: 'インテリジェント画像認識 · バッチ処理 · マルチモードサポート · Apple Silicon対応',
-                modeTitle: '認識モードを選択（拡張版：Find と Freeform を追加）',
-                modes: {
-                    document: 'ドキュメントをMarkdownへ',
-                    ocr: '汎用OCR',
-                    free: 'プレーンテキスト抽出',
-                    figure: 'チャート解析',
-                    describe: '画像説明',
-                    find: '検索と位置特定',
-                    freeform: 'カスタムプロンプト'
-                },
-                findMode: {
-                    title: '検索と位置特定',
-                    uploadText: 'クリックまたはドラッグして画像をアップロード',
-                    uploadHint: 'JPG, PNG, JPEG, BMP, GIF をサポート',
-                    inputLabel: '検索内容を入力',
-                    inputPlaceholder: '例：Total, Invoice #, 金額, 名前',
-                    inputHint: '画像内で検索したいテキストを入力すると、システムが自動的に位置を特定します',
-                    btnProcess: '検索開始',
-                    btnChange: '画像を変更',
-                    btnClear: 'クリアしてリセット',
-                    resultTitle: '認識結果',
-                    emptyText: '認識待ち',
-                    emptyHint: '画像をアップロードして検索語を入力し、「検索開始」をクリックしてください',
-                    matchesTitle: '見つかった一致項目'
-                },
-                batchMode: {
-                    uploadText: '画像またはPDFをここにドラッグまたはクリックしてアップロード',
-                    uploadHint: 'バッチアップロード対応、PDFは自動的に画像に変換、順序調整可能',
-                    freeformLabel: 'カスタムプロンプト',
-                    freeformPlaceholder: 'カスタムプロンプトを入力（例：すべての日付と金額を抽出）',
-                    freeformHint: '希望する認識効果を説明すると、AIが要求に応じて各画像を処理します',
-                    imagesTitle: 'アップロード済み画像',
-                    imagesDragHint: 'ドラッグして順序を調整',
-                    btnProcess: '認識開始',
-                    btnAddMore: 'さらに追加',
-                    btnClear: 'すべてクリア',
-                    progressTitle: '認識進捗',
-                    processed: '処理済み:',
-                    total: '合計:',
-                    resultTitle: '認識結果',
-                    btnCopy: 'テキストをコピー',
-                    btnDownload: 'ダウンロード',
-                    logTitle: '操作ログ',
-                    logCount: '合計',
-                    logRecords: '件の記録'
-                },
-                logTypes: {
-                    success: '成功',
-                    error: 'エラー',
-                    warning: '警告',
-                    info: '情報'
-                },
-                github: {
-                    starButton: '⭐ Star on GitHub',
-                    bannerTitle: '⭐ このプロジェクトが気に入りましたか？Starをください！⭐',
-                    bannerDesc: 'このプロジェクトがお役に立ちましたら、GitHubでStarをつけてサポートしてください！',
-                    bannerButton: '⭐ GitHubでStarをつける',
-                    linkHome: '🏠 ホーム',
-                    linkIssues: '🐛 問題報告',
-                    linkDocs: '📖 ドキュメント',
-                    linkChangelog: '📝 更新履歴',
-                    madeWith: 'Made with ❤️ by',
-                    poweredBy: 'Powered by DeepSeek-OCR'
-                }
-            }
-        };
         
-        // Current language
-        let currentLang = localStorage.getItem('ocr_language') || 'zh-CN';
+        // Use window.i18n from external i18n.js
+        const t = window.i18n.t;
+        const switchLanguage = window.i18n.switchLanguage;
+        const updateUILanguage = window.i18n.updateUILanguage;
+        const initI18n = window.i18n.initI18n;
+        let currentLang = window.i18n.getCurrentLang();
         
-        // Get translation
-        function t(path) {
-            const keys = path.split('.');
-            let value = translations[currentLang];
-            for (const key of keys) {
-                value = value?.[key];
-                if (value === undefined) return path;
-            }
-            return value;
+        // Re-initialize updateUILanguage to handle dynamic button updates
+        const originalUpdateUILanguage = updateUILanguage;
+        // Custom UI language updater that extends the base i18n functionality
+        function customUpdateUILanguage() {
+            currentLang = window.i18n.getCurrentLang();
+            
+            // Call original update from i18n.js
+            originalUpdateUILanguage();
+            
         }
-        
-        // Update all UI text
-        function updateUILanguage() {
-            console.log('🌐 切换语言到:', currentLang);
-            
-            // Update header subtitle
-            const subtitle = document.getElementById('headerSubtitle');
-            if (subtitle) subtitle.textContent = t('headerSubtitle');
-            
-            // Update mode title
-            const modeTitle = document.querySelector('.mode-title');
-            if (modeTitle) modeTitle.textContent = t('modeTitle');
-            
-            // Update mode names
-            document.querySelectorAll('.mode-option').forEach(option => {
-                const mode = option.dataset.mode;
-                const nameEl = option.querySelector('.mode-name');
-                if (nameEl && t(`modes.${mode}`)) {
-                    nameEl.textContent = t(`modes.${mode}`);
-                }
-            });
-            
-            // Update Find mode texts
-            const findTexts = {
-                '.find-panel-title span:last-child': 'findMode.title',
-                '.find-upload-text': 'findMode.uploadText',
-                '.find-upload-hint': 'findMode.uploadHint',
-                '.find-input-label': 'findMode.inputLabel',
-                '.find-result-empty-text': 'findMode.emptyText',
-                '.find-result-empty-hint': 'findMode.emptyHint',
-                '.find-matches-title span:last-child': 'findMode.matchesTitle'
-            };
-            
-            for (const [selector, key] of Object.entries(findTexts)) {
-                const el = document.querySelector(selector);
-                if (el) el.textContent = t(key);
-            }
-            
-            // Update Find mode placeholders and hints
-            const findInput = document.getElementById('findTermInput');
-            if (findInput) findInput.placeholder = t('findMode.inputPlaceholder');
-            
-            const findHint = document.querySelector('.find-input-hint');
-            if (findHint) findHint.textContent = t('findMode.inputHint');
-            
-            // Update Find mode buttons
-            const findBtns = {
-                'findProcessBtn': 'findMode.btnProcess',
-                'findChangeBtn': 'findMode.btnChange',
-                'findClearBtn': 'findMode.btnClear'
-            };
-            
-            for (const [id, key] of Object.entries(findBtns)) {
-                const btn = document.getElementById(id);
-                if (btn) {
-                    const textSpan = btn.querySelector('span:last-child');
-                    if (textSpan) {
-                        const newText = t(key).replace(/^[🚀🔄🗑️]\s*/, '');
-                        textSpan.textContent = newText;
-                    }
-                }
-            }
-            
-            // Update batch mode
-            const batchBtns = {
-                'processBtn': 'batchMode.btnProcess',
-                'addMoreBtn': 'batchMode.btnAddMore',
-                'clearBtn': 'batchMode.btnClear',
-                'copyBtn': 'batchMode.btnCopy',
-                'downloadBtn': 'batchMode.btnDownload'
-            };
-            
-            for (const [id, key] of Object.entries(batchBtns)) {
-                const btn = document.getElementById(id);
-                if (btn) {
-                    const emojiSpan = btn.querySelector('span:first-child');
-                    const textSpan = btn.querySelector('span:last-child');
-                    const emoji = emojiSpan ? emojiSpan.textContent.trim() : '';
-                    const newText = t(key).replace(/^[🚀➕🗑️📋⬇️]\s*/, '');
-                    
-                    // 检查按钮结构：批量模式按钮是 <span>emoji</span> 文本节点
-                    // Find模式按钮是 <span>emoji</span><span>文本</span>
-                    
-                    if (emojiSpan && textSpan && textSpan !== emojiSpan) {
-                        // Find模式：有两个span（emoji和文本），更新文本span
-                        textSpan.textContent = newText;
-                    } else if (emojiSpan && !textSpan) {
-                        // 批量模式：只有一个emoji span，文本是按钮的直接文本节点
-                        // 先清空所有非span节点，避免重复
-                        const nodesToRemove = [];
-                        Array.from(btn.childNodes).forEach(node => {
-                            // 保留emoji span，移除所有其他节点（包括文本节点和其他可能的span）
-                            if (node !== emojiSpan) {
-                                nodesToRemove.push(node);
-                            }
-                        });
-                        // 移除所有非emoji span的节点
-                        nodesToRemove.forEach(node => btn.removeChild(node));
-                        // 添加新的文本节点（带空格）
-                        btn.appendChild(document.createTextNode(' ' + newText));
-                    } else if (emojiSpan) {
-                        // 如果只有emoji span但没有文本节点，直接设置innerHTML
-                        btn.innerHTML = `<span>${emoji}</span> ${newText}`;
-                    }
-                }
-            }
-            
-            // Update data-i18n elements
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                el.textContent = t(key);
-            });
-            
-            console.log('✅ 语言切换完成');
-        }
-        
-        // Initialize language switcher
-        function initLanguageSwitcher() {
-            const switcher = document.getElementById('languageSwitcher');
-            if (switcher) {
-                switcher.value = currentLang;
-                switcher.addEventListener('change', (e) => {
-                    currentLang = e.target.value;
-                    localStorage.setItem('ocr_language', currentLang);
-                    updateUILanguage();
-                });
-            }
-        }
-        
-        // ====================================
-        // End of i18n
-        // ====================================
 
+        // ====================================
         // Configuration
         const CONFIG = {
             apiUrl: window.location.origin || 'http://localhost:8001',
@@ -2046,10 +1652,10 @@
             });
         }
 
-        // Add Log Entry (增强版)
+        // Add Log Entry (使用 i18n 国际化)
         function addLog(message, type = 'info', detail = '', extraData = null) {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('zh-CN', { 
+            const timeStr = now.toLocaleTimeString(currentLang === 'en-US' ? 'en-US' : 'zh-CN', { 
                 hour12: false,
                 hour: '2-digit',
                 minute: '2-digit',
@@ -2057,50 +1663,51 @@
                 fractionalSecondDigits: 3
             });
 
-            // 日志消息映射表（中文 → 英文）
-            const logMessages = {
-                '系统初始化': 'System Init',
-                '切换模式': 'Mode Switch',
-                '切换识别模式': 'Mode Changed',
-                '文件上传失败': 'Upload Failed',
-                '部分文件已忽略': 'Files Ignored',
-                '开始上传图片': 'Upload Started',
-                '图片上传完成': 'Upload Complete',
-                '图片加载失败': 'Image Load Failed',
-                'PDF 转换开始': 'PDF Conversion Started',
-                'PDF 转换进度': 'PDF Converting',
-                'PDF 转换完成': 'PDF Conversion Complete',
-                'PDF 转换失败': 'PDF Conversion Failed',
-                '开始拖动图片': 'Drag Started',
-                '图片顺序已调整': 'Order Changed',
-                '图片上传成功': 'Image Uploaded',
-                '清空图片': 'Images Cleared',
-                '无法开始识别': 'Cannot Start',
-                '开始批量识别': 'Batch Recognition Started',
-                '识别图片': 'Processing Image',
-                '✓ 识别成功': '✓ Success',
-                '✗ 识别失败': '✗ Failed',
-                '批量识别完成': 'Batch Complete',
-                '开始查找定位': 'Find Started',
-                '✓ 查找定位成功': '✓ Find Success',
-                '查找完成': 'Find Complete',
-                '✗ 查找失败': '✗ Find Failed',
-                '复制操作失败': 'Copy Failed',
-                '复制到剪贴板': 'Copied to Clipboard',
-                '下载操作失败': 'Download Failed',
-                '下载识别结果': 'Downloaded',
-                '清空队列': 'Queue Cleared',
-                '文件格式不支持': 'Format Not Supported',
-                'PDF 转换成功': 'PDF Converted',
-                '重置 Find 模式': 'Find Mode Reset',
-                '开始查找': 'Find Started',
-                '✓ 查找成功': '✓ Find Success'
+            // Map Chinese messages to i18n keys
+            const messageKeyMap = {
+                '系统初始化': 'systemInit',
+                '切换模式': 'modeSwitch',
+                '切换识别模式': 'modeChanged',
+                '文件上传失败': 'uploadFailed',
+                '部分文件已忽略': 'filesIgnored',
+                '开始上传图片': 'uploadStarted',
+                '图片上传完成': 'uploadComplete',
+                '图片加载失败': 'imageLoadFailed',
+                'PDF 转换开始': 'pdfConversionStarted',
+                'PDF 转换进度': 'pdfConverting',
+                'PDF 转换完成': 'pdfConversionComplete',
+                'PDF 转换失败': 'pdfConversionFailed',
+                '开始拖动图片': 'dragStarted',
+                '图片顺序已调整': 'orderChanged',
+                '图片上传成功': 'imageUploaded',
+                '清空图片': 'imagesCleared',
+                '无法开始识别': 'cannotStart',
+                '开始批量识别': 'batchRecognitionStarted',
+                '识别图片': 'processingImage',
+                '✓ 识别成功': 'recognitionSuccess',
+                '✗ 识别失败': 'recognitionFailed',
+                '批量识别完成': 'batchComplete',
+                '开始查找定位': 'findStarted',
+                '✓ 查找定位成功': 'findSuccess',
+                '查找完成': 'findComplete',
+                '✗ 查找失败': 'findFailed',
+                '复制操作失败': 'copyFailed',
+                '复制到剪贴板': 'copiedToClipboard',
+                '下载操作失败': 'downloadFailed',
+                '下载识别结果': 'downloaded',
+                '清空队列': 'queueCleared',
+                '文件格式不支持': 'formatNotSupported',
+                'PDF 转换成功': 'pdfConverted',
+                '重置 Find 模式': 'findModeReset',
+                '开始查找': 'findStarted',
+                '✓ 查找成功': 'findSuccess'
             };
 
-            // 转换消息为英文
-            const englishMessage = logMessages[message] || message;
+            // Get translated message using i18n
+            const messageKey = messageKeyMap[message];
+            const translatedMessage = messageKey ? t(`logMessages.${messageKey}`) : message;
 
-            // 获取国际化的类型标签
+            // Get translated type label
             const typeLabel = t(`logTypes.${type}`) || type;
 
             let extraHtml = '';
@@ -2120,7 +1727,7 @@
                     <span class="log-time">${timeStr}</span>
                     <span class="log-type ${type}">${typeLabel}</span>
                 </div>
-                <div class="log-message">${englishMessage}</div>
+                <div class="log-message">${translatedMessage}</div>
                 ${extraHtml}
             `;
 
@@ -3692,10 +3299,16 @@
         // Initialize app
         init();
         initFindMode();
-        initLanguageSwitcher();
+        
+        // Initialize i18n from external i18n.js
+        if (window.i18n && window.i18n.initI18n) {
+            window.i18n.initI18n();
+        }
         
         // Apply initial language
-        updateUILanguage();
+        if (window.i18n && window.i18n.updateUILanguage) {
+            window.i18n.updateUILanguage();
+        }
     </script>
 </body>
 </html>
