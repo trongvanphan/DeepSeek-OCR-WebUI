@@ -1,0 +1,27 @@
+# Custom Prompt Configuration for DeepSeek-OCR
+# 
+# This file allows you to define custom prompts for OCR processing.
+# The prompts here can be referenced in your scripts or API calls.
+#
+# Usage:
+#   - Edit the 'prompt' field below to change the default custom prompt
+#   - Use this prompt in pdf_to_custom_prompt.py scripts
+#   - Or pass custom prompts directly via API parameters
+#
+# Available prompt patterns:
+#   - <image>\n<|grounding|>Convert the document to markdown.
+#   - <image>\n<|grounding|>OCR this image.
+#   - <image>\nFree OCR.
+#   - <image>\nParse the figure.
+#   - <image>\nDescribe this image in detail.
+#   - <image>\n<|grounding|>Locate <|ref|>term<|/ref|> in the image.
+#
+
+# Default custom prompt (can be overridden per request)
+prompt: '<image>\n<|grounding|>Convert the document to markdown.'
+
+# Alternative prompts (uncomment to use):
+# prompt: '<image>\nFree OCR.'
+# prompt: '<image>\n<|grounding|>Extract all tables and format as CSV.'
+# prompt: '<image>\nParse the figure and describe all data points.'
+# prompt: '<image>\n<|grounding|>OCR this image with precise layout preservation.'

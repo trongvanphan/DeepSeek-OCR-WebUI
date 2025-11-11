@@ -1,0 +1,84 @@
+# DeepSeek-OCR Global Configuration
+#
+# This file contains global settings for the DeepSeek-OCR service.
+# Settings here can be overridden by environment variables.
+#
+
+# Server Configuration
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  reload: false
+  log_level: "info"
+
+# Model Configuration
+model:
+  name: "deepseek-ai/DeepSeek-OCR"
+  max_concurrency: 50
+  timeout: 300  # seconds
+  
+# Processing Configuration
+processing:
+  # PDF to image conversion
+  pdf_dpi: 144  # DPI for PDF rendering (higher = better quality, slower)
+  max_pdf_pages: 100  # Maximum pages to process per PDF
+  
+  # Image processing
+  max_image_size: 4096  # Maximum image dimension in pixels
+  auto_rotate: true  # Auto-rotate images based on EXIF
+  
+  # Post-processing options
+  extract_images: true  # Extract and save images from PDFs
+  clean_output: true  # Remove special tokens from output
+  add_page_markers: true  # Add page split markers in multi-page outputs
+
+# Output Configuration
+output:
+  # Directory structure
+  images_dir: "output/images"  # Where to save extracted images
+  results_dir: "output/results"  # Where to save OCR results
+  
+  # File naming
+  suffix_markdown: "-MD.md"  # Suffix for markdown conversion
+  suffix_ocr: "-OCR.md"  # Suffix for plain OCR
+  suffix_custom: "-CUSTOM.md"  # Suffix for custom prompt results
+
+# Default Prompts for Each Mode
+prompts:
+  document: "<image>\n<|grounding|>Convert the document to markdown."
+  ocr: "<image>\n<|grounding|>OCR this image."
+  free: "<image>\nFree OCR. Only output the raw text."
+  figure: "<image>\nParse the figure."
+  describe: "<image>\nDescribe this image in detail."
+  find: "<image>\n<|grounding|>Locate <|ref|>{term}<|/ref|> in the image."
+  custom: "<image>\n<|grounding|>Convert the document to markdown."  # Default for custom mode
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/deepseek_ocr.log"
+  max_size: 10485760  # 10MB
+  backup_count: 5
+
+# Performance Configuration
+performance:
+  enable_caching: false  # Cache results for repeated requests
+  cache_ttl: 3600  # Cache time-to-live in seconds
+  parallel_processing: true  # Process multiple images in parallel
+  max_workers: 4  # Number of worker threads for parallel processing
+
+# Backend-Specific Settings
+backends:
+  mps:
+    device: "mps"
+    dtype: "float16"
+  cuda:
+    device: "cuda"
+    dtype: "float16"
+    gpu_memory_utilization: 0.85
+  cpu:
+    device: "cpu"
+    dtype: "float32"
+    num_threads: 4

@@ -23,6 +23,7 @@ import tempfile
 import io
 import base64
 import platform
+import yaml
 from typing import Optional, List, Dict, Any
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -31,16 +32,58 @@ from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from PIL import Image, ImageOps
 import uvicorn
 import fitz  # PyMuPDF for PDF processing
 from decouple import config  # Environment configuration
+
+# Local imports
+from utils.post_processor import OCRPostProcessor
+
+# ==============================================================================
+# Response Models
+# ==============================================================================
+
+class OCRResponse(BaseModel):
+    """Response model for single image OCR"""
+    success: bool
+    result: Optional[str] = None
+    error: Optional[str] = None
+    page_count: Optional[int] = None
+    images_extracted: Optional[int] = None
+    mode: Optional[str] = None
+    prompt_used: Optional[str] = None
+
+
+class PageOCRResult(BaseModel):
+    """Response model for a single page in PDF processing"""
+    success: bool
+    result: Optional[str] = None
+    error: Optional[str] = None
+    page_number: int
+    images_extracted: Optional[int] = 0
+    references: Optional[List[Dict[str, Any]]] = []
+
+
+class BatchOCRResponse(BaseModel):
+    """Response model for batch/PDF OCR"""
+    success: bool
+    results: List[PageOCRResult]
+    total_pages: int
+    filename: str
+    mode: Optional[str] = None
+    prompt_used: Optional[str] = None
+    total_images_extracted: Optional[int] = 0
+    error: Optional[str] = None
+
 
 # ==============================================================================
 # Global State
 # ==============================================================================
 backend = None  # Will hold the OCR backend instance
 backend_type = None  # Will store the detected backend type (mps/cuda/cpu)
+post_processor = None  # Post-processor instance
 
 # ==============================================================================
 # Platform Detection
@@ -109,6 +152,7 @@ async def lifespan(app: FastAPI):
     - Detects platform and selects appropriate backend
     - Loads OCR model into memory
     - Initializes backend-specific configurations
+    - Initializes post-processor
     
     Shutdown:
     - Cleans up resources
@@ -117,12 +161,19 @@ async def lifespan(app: FastAPI):
     Args:
         app: FastAPI application instance
     """
-    global backend, backend_type
+    global backend, backend_type, post_processor
     
     # Startup
     print("=" * 50)
     print("🚀 DeepSeek-OCR Unified Service Starting...")
     print("=" * 50)
+    
+    # Initialize post-processor
+    post_processor = OCRPostProcessor(
+        extract_images=True,
+        images_dir="output/images"
+    )
+    print("✅ Post-processor initialized")
     
     # Detect platform and load appropriate backend
     backend_type = detect_platform()
@@ -194,6 +245,27 @@ app.add_middleware(
 # ==============================================================================
 # Prompt Engineering
 # ==============================================================================
+
+def load_custom_prompt_from_yaml(yaml_file: str = "custom_prompt.yaml") -> Optional[str]:
+    """
+    Load custom prompt from YAML configuration file.
+    
+    Args:
+        yaml_file: Path to YAML file containing custom prompt
+        
+    Returns:
+        Custom prompt string or None if file doesn't exist
+    """
+    try:
+        yaml_path = Path(yaml_file)
+        if yaml_path.exists():
+            with open(yaml_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                return data.get('prompt', None)
+    except Exception as e:
+        print(f"Warning: Could not load custom prompt from {yaml_file}: {e}")
+    return None
+
 
 def build_prompt(mode: str, custom_prompt: str = "", find_term: str = "", include_caption: bool = False) -> str:
     """
@@ -638,6 +710,245 @@ async def pdf_to_images_endpoint(file: UploadFile = File(...)):
         # Clean up temporary file
         if tmp_file and os.path.exists(tmp_file):
             os.remove(tmp_file)
+
+
+# ==============================================================================
+# Enhanced PDF Processing Endpoints
+# ==============================================================================
+
+@app.post("/ocr/image", response_model=OCRResponse)
+async def process_image_endpoint(
+    file: UploadFile = File(...),
+    prompt: Optional[str] = Form(None),
+    prompt_type: str = Form("document"),
+    base_size: int = Form(1024),
+    image_size: int = Form(640),
+    crop_mode: bool = Form(True)
+):
+    """
+    Process a single image with optional custom prompt.
+    
+    Enhanced version that supports custom prompts per request.
+    
+    Args:
+        file: Uploaded image file
+        prompt: Optional custom prompt (overrides prompt_type if provided)
+        prompt_type: OCR mode if no custom prompt provided
+        base_size: Base resolution for processing
+        image_size: Patch size for vision encoder
+        crop_mode: Enable cropping optimization
+        
+    Returns:
+        OCRResponse with processed text and metadata
+    """
+    if backend is None:
+        return OCRResponse(
+            success=False,
+            error="OCR backend not loaded",
+            page_count=1
+        )
+    
+    validate_ocr_parameters(base_size, image_size)
+    tmp_file = None
+    
+    try:
+        # Save uploaded image
+        image_data = await file.read()
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.png', mode='wb') as tmp:
+            tmp.write(image_data)
+            tmp_file = tmp.name
+        
+        # Load and process image
+        with Image.open(tmp_file) as img:
+            img = ImageOps.exif_transpose(img).convert('RGB')
+        
+        # Use custom prompt or build from type
+        if prompt:
+            final_prompt = prompt
+        else:
+            final_prompt = build_prompt(prompt_type)
+        
+        # Run OCR
+        text = backend.infer(
+            prompt=final_prompt,
+            image_path=tmp_file,
+            base_size=base_size,
+            image_size=image_size,
+            crop_mode=crop_mode
+        )
+        
+        # Clean output
+        cleaned_text = post_processor.clean_content(text) if post_processor else clean_grounding_text(text)
+        
+        return OCRResponse(
+            success=True,
+            result=cleaned_text,
+            page_count=1,
+            mode=prompt_type,
+            prompt_used=final_prompt
+        )
+        
+    except Exception as e:
+        return OCRResponse(
+            success=False,
+            error=str(e),
+            page_count=1
+        )
+        
+    finally:
+        if tmp_file and os.path.exists(tmp_file):
+            os.remove(tmp_file)
+
+
+@app.post("/ocr/pdf", response_model=BatchOCRResponse)
+async def process_pdf_endpoint(
+    file: UploadFile = File(...),
+    prompt: Optional[str] = Form(None),
+    prompt_type: str = Form("document"),
+    base_size: int = Form(1024),
+    image_size: int = Form(640),
+    crop_mode: bool = Form(True),
+    extract_images: bool = Form(True)
+):
+    """
+    Process a PDF file with enhanced post-processing.
+    
+    Converts PDF to images, processes each page, and optionally extracts
+    images from the document based on bounding box detections.
+    
+    Args:
+        file: Uploaded PDF file
+        prompt: Optional custom prompt (overrides prompt_type if provided)
+        prompt_type: OCR mode if no custom prompt provided
+        base_size: Base resolution for processing
+        image_size: Patch size for vision encoder
+        crop_mode: Enable cropping optimization
+        extract_images: Whether to extract and save detected images
+        
+    Returns:
+        BatchOCRResponse with per-page results and metadata
+    """
+    if backend is None:
+        return BatchOCRResponse(
+            success=False,
+            results=[],
+            total_pages=0,
+            filename=file.filename,
+            mode=prompt_type
+        )
+    
+    validate_ocr_parameters(base_size, image_size)
+    tmp_file = None
+    
+    try:
+        # Validate file type
+        if not file.filename.lower().endswith('.pdf'):
+            raise HTTPException(status_code=400, detail="Only PDF files are supported")
+        
+        # Save PDF
+        pdf_data = await file.read()
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf', mode='wb') as tmp:
+            tmp.write(pdf_data)
+            tmp_file = tmp.name
+        
+        # Use custom prompt or build from type
+        if prompt:
+            final_prompt = prompt
+        else:
+            final_prompt = build_prompt(prompt_type)
+        
+        # Convert PDF to images
+        pdf_doc = fitz.open(tmp_file)
+        zoom = 144 / 72.0
+        matrix = fitz.Matrix(zoom, zoom)
+        
+        results = []
+        total_images = 0
+        base_filename = Path(file.filename).stem
+        
+        # Process each page
+        for page_num in range(pdf_doc.page_count):
+            try:
+                # Render page
+                page = pdf_doc[page_num]
+                pixmap = page.get_pixmap(matrix=matrix, alpha=False)
+                img_data = pixmap.tobytes("png")
+                
+                # Save to temp file for OCR
+                page_tmp = None
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.png', mode='wb') as tmp_page:
+                    tmp_page.write(img_data)
+                    page_tmp = tmp_page.name
+                
+                # Run OCR on page
+                text = backend.infer(
+                    prompt=final_prompt,
+                    image_path=page_tmp,
+                    base_size=base_size,
+                    image_size=image_size,
+                    crop_mode=crop_mode
+                )
+                
+                # Post-process if enabled
+                if post_processor and extract_images:
+                    processed = post_processor.process_page_content(
+                        tmp_file, text, page_num, base_filename
+                    )
+                    cleaned_text = processed["cleaned_content"]
+                    images_extracted = processed["images_extracted"]
+                    references = processed["references"]
+                else:
+                    cleaned_text = post_processor.clean_content(text) if post_processor else clean_grounding_text(text)
+                    images_extracted = 0
+                    references = []
+                
+                total_images += images_extracted
+                
+                results.append(PageOCRResult(
+                    success=True,
+                    result=cleaned_text,
+                    page_number=page_num + 1,
+                    images_extracted=images_extracted,
+                    references=references
+                ))
+                
+                # Cleanup page temp file
+                if page_tmp and os.path.exists(page_tmp):
+                    os.remove(page_tmp)
+                
+            except Exception as e:
+                results.append(PageOCRResult(
+                    success=False,
+                    error=str(e),
+                    page_number=page_num + 1
+                ))
+        
+        pdf_doc.close()
+        
+        return BatchOCRResponse(
+            success=True,
+            results=results,
+            total_pages=len(results),
+            filename=file.filename,
+            mode=prompt_type,
+            prompt_used=final_prompt,
+            total_images_extracted=total_images
+        )
+        
+    except Exception as e:
+        return BatchOCRResponse(
+            success=False,
+            results=[],
+            total_pages=0,
+            filename=file.filename,
+            mode=prompt_type,
+            error=str(e)
+        )
+        
+    finally:
+        if tmp_file and os.path.exists(tmp_file):
+            os.remove(tmp_file)
+
 
 # ==============================================================================
 # Main Entry Point
