@@ -75,6 +75,35 @@ const translations = {
             completed: '识别完成'
         },
         
+        // Advanced Settings
+        advancedSettings: {
+            title: '高级设置',
+            baseSize: {
+                label: '基础分辨率 (Base Size)',
+                hint: '图像处理的基础分辨率。数值越高，质量越好但速度越慢。推荐：1024'
+            },
+            imageSize: {
+                label: '切片大小 (Image Size)',
+                hint: '动态裁剪的切片大小。影响内存使用。推荐：640'
+            },
+            cropMode: {
+                label: '启用裁剪模式',
+                hint: '对大图进行动态裁剪，提高识别精度'
+            },
+            includeCaption: {
+                label: '包含图像描述',
+                hint: '在识别结果中添加图像的详细描述'
+            },
+            reset: '重置默认值'
+        },
+        
+        // View Toggle
+        viewToggle: {
+            formatted: '格式化',
+            raw: '原始文本',
+            html: 'HTML 渲染'
+        },
+        
         // GitHub & Footer
         github: {
             starButton: '⭐ Star on GitHub',
@@ -199,6 +228,35 @@ const translations = {
             completed: '識別完成'
         },
         
+        // Advanced Settings
+        advancedSettings: {
+            title: '高級設置',
+            baseSize: {
+                label: '基礎解析度 (Base Size)',
+                hint: '圖像處理的基礎解析度。數值越高，質量越好但速度越慢。推薦：1024'
+            },
+            imageSize: {
+                label: '切片大小 (Image Size)',
+                hint: '動態裁剪的切片大小。影響記憶體使用。推薦：640'
+            },
+            cropMode: {
+                label: '啟用裁剪模式',
+                hint: '對大圖進行動態裁剪，提高識別精度'
+            },
+            includeCaption: {
+                label: '包含圖像描述',
+                hint: '在識別結果中添加圖像的詳細描述'
+            },
+            reset: '重置預設值'
+        },
+        
+        // View Toggle
+        viewToggle: {
+            formatted: '格式化',
+            raw: '原始文本',
+            html: 'HTML 渲染'
+        },
+        
         github: {
             starButton: '⭐ Star on GitHub',
             bannerTitle: '⭐ 喜歡這個項目？給我們一個 Star！⭐',
@@ -320,6 +378,35 @@ const translations = {
             clearSuccess: 'Cleared',
             processing: 'Processing...',
             completed: 'Completed'
+        },
+        
+        // Advanced Settings
+        advancedSettings: {
+            title: 'Advanced Settings',
+            baseSize: {
+                label: 'Base Size',
+                hint: 'Base resolution for image processing. Higher values = better quality but slower. Recommended: 1024'
+            },
+            imageSize: {
+                label: 'Image Size',
+                hint: 'Tile size for dynamic cropping. Affects memory usage. Recommended: 640'
+            },
+            cropMode: {
+                label: 'Enable Crop Mode',
+                hint: 'Dynamically crop large images to improve accuracy'
+            },
+            includeCaption: {
+                label: 'Include Caption',
+                hint: 'Add detailed image description to the output'
+            },
+            reset: 'Reset to Defaults'
+        },
+        
+        // View Toggle
+        viewToggle: {
+            formatted: 'Formatted',
+            raw: 'Raw Text',
+            html: 'HTML Render'
         },
         
         github: {
@@ -450,6 +537,35 @@ const translations = {
             clearSuccess: 'Cleared',
             processing: 'Processing...',
             completed: 'Recognition completed'
+        },
+        
+        // Advanced Settings
+        advancedSettings: {
+            title: '詳細設定',
+            baseSize: {
+                label: 'ベース解像度 (Base Size)',
+                hint: '画像処理の基本解像度。値が高いほど品質が良くなりますが、処理速度は遅くなります。推奨：1024'
+            },
+            imageSize: {
+                label: 'タイルサイズ (Image Size)',
+                hint: '動的クロップのタイルサイズ。メモリ使用量に影響します。推奨：640'
+            },
+            cropMode: {
+                label: 'クロップモードを有効化',
+                hint: '大きな画像を動的にクロップして認識精度を向上させます'
+            },
+            includeCaption: {
+                label: 'キャプションを含める',
+                hint: '認識結果に画像の詳細な説明を追加します'
+            },
+            reset: 'デフォルトに戻す'
+        },
+        
+        // View Toggle
+        viewToggle: {
+            formatted: 'フォーマット済み',
+            raw: '生テキスト',
+            html: 'HTMLレンダリング'
         },
         
         github: {

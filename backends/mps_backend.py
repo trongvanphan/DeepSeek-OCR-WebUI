@@ -39,8 +39,22 @@ class MPSBackend:
             print(f"❌ Model loading failed: {e}")
             raise
     
-    def infer(self, prompt: str, image_path: str, **kwargs) -> str:
-        """Run inference using model's infer method"""
+    def infer(self, prompt: str, image_path: str, base_size: int = 1024, 
+              image_size: int = 640, crop_mode: bool = True, **kwargs) -> str:
+        """
+        Run inference using model's infer method.
+        
+        Args:
+            prompt: OCR prompt with mode instructions
+            image_path: Path to the image file
+            base_size: Base resolution for image processing (default: 1024)
+            image_size: Patch size for vision encoder (default: 640)
+            crop_mode: Enable image cropping to improve accuracy (default: True)
+            **kwargs: Additional arguments (ignored)
+        
+        Returns:
+            str: OCR result text
+        """
         try:
             # Use model's built-in infer method with eval_mode=True to get return value
             result = self.model.infer(
@@ -48,9 +62,9 @@ class MPSBackend:
                 prompt=prompt,
                 image_file=image_path,
                 output_path='./output',
-                base_size=1024,
-                image_size=640,
-                crop_mode=True,
+                base_size=base_size,
+                image_size=image_size,
+                crop_mode=crop_mode,
                 test_compress=False,
                 save_results=False,
                 eval_mode=True  # Important: enables return value

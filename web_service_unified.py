@@ -34,6 +34,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, ImageOps
 import uvicorn
 import fitz  # PyMuPDF for PDF processing
+from decouple import config  # Environment configuration
 
 # ==============================================================================
 # Global State
@@ -65,7 +66,7 @@ def detect_platform() -> str:
     machine = platform.machine()
     
     # Manual backend override via environment variable
-    force_backend = os.environ.get("FORCE_BACKEND", "").lower()
+    force_backend = config("FORCE_BACKEND", default="").lower()
     if force_backend in ["mps", "cuda", "cpu"]:
         print(f"🔧 Forced backend: {force_backend.upper()}")
         return force_backend
@@ -194,7 +195,7 @@ app.add_middleware(
 # Prompt Engineering
 # ==============================================================================
 
-def build_prompt(mode: str, custom_prompt: str = "", find_term: str = "") -> str:
+def build_prompt(mode: str, custom_prompt: str = "", find_term: str = "", include_caption: bool = False) -> str:
     """
     Build an OCR prompt based on the selected mode.
     
@@ -205,6 +206,7 @@ def build_prompt(mode: str, custom_prompt: str = "", find_term: str = "") -> str
         mode: OCR mode - "document", "ocr", "free", "figure", "describe", "find", or "freeform"
         custom_prompt: Custom prompt text for freeform mode
         find_term: Search term for find mode (e.g., "Total", "Invoice #")
+        include_caption: Add caption generation instruction to prompt
     
     Returns:
         str: Formatted prompt string for the model
@@ -230,12 +232,18 @@ def build_prompt(mode: str, custom_prompt: str = "", find_term: str = "") -> str
     
     if mode == "find":
         term = find_term.strip() or "Total"  # Default to "Total" if empty
-        return templates["find"].replace("{term}", term)
+        prompt = templates["find"].replace("{term}", term)
     elif mode == "freeform":
-        prompt = custom_prompt.strip() or "OCR this image."  # Default prompt
-        return templates["freeform"].replace("{prompt}", prompt)
+        prompt_text = custom_prompt.strip() or "OCR this image."  # Default prompt
+        prompt = templates["freeform"].replace("{prompt}", prompt_text)
+    else:
+        prompt = templates.get(mode, templates["document"])
     
-    return templates.get(mode, templates["document"])
+    # Append caption instruction if requested
+    if include_caption and mode not in ["describe", "figure"]:
+        prompt += " Include a detailed caption describing the image content."
+    
+    return prompt
 
 # ==============================================================================
 # Text Processing & Bounding Box Parsing
@@ -378,13 +386,48 @@ async def health_check():
         "model_loaded": backend is not None
     }
 
+# ==============================================================================
+# Parameter Validation
+# ==============================================================================
+
+def validate_ocr_parameters(base_size: int, image_size: int) -> None:
+    """
+    Validate OCR processing parameters.
+    
+    Args:
+        base_size: Base resolution for image processing
+        image_size: Patch size for vision encoder
+    
+    Raises:
+        HTTPException: If parameters are out of valid range
+    """
+    if not 512 <= base_size <= 2048:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid base_size: {base_size}. Must be between 512 and 2048."
+        )
+    
+    if not 224 <= image_size <= 1280:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid image_size: {image_size}. Must be between 224 and 1280."
+        )
+
+# ==============================================================================
+# OCR Endpoint
+# ==============================================================================
+
 @app.post("/ocr")
 async def ocr_endpoint(
     file: UploadFile = File(...),
     prompt_type: str = Form("document"),
     find_term: str = Form(""),
     custom_prompt: str = Form(""),
-    grounding: bool = Form(False)
+    grounding: bool = Form(False),
+    base_size: int = Form(1024),
+    image_size: int = Form(640),
+    crop_mode: bool = Form(True),
+    include_caption: bool = Form(False)
 ):
     """
     Main OCR endpoint for processing images.
@@ -399,6 +442,10 @@ async def ocr_endpoint(
         find_term: Search term for find mode (e.g., "Total", "Invoice #")
         custom_prompt: Custom prompt text for freeform mode
         grounding: Whether to include bounding boxes (currently unused, auto-detected)
+        base_size: Base resolution for image processing (default: 1024, range: 512-2048)
+        image_size: Patch size for vision encoder (default: 640, range: 224-1024)
+        crop_mode: Enable image cropping to improve accuracy (default: True)
+        include_caption: Add caption generation instruction to prompt (default: False)
     
     Returns:
         JSON response with:
@@ -421,6 +468,9 @@ async def ocr_endpoint(
             detail="OCR backend not loaded. Service may be starting up."
         )
     
+    # Validate parameters
+    validate_ocr_parameters(base_size, image_size)
+    
     tmp_file = None
     
     try:
@@ -437,10 +487,16 @@ async def ocr_endpoint(
             orig_w, orig_h = img.size
         
         # Build appropriate prompt based on mode
-        prompt = build_prompt(prompt_type, custom_prompt, find_term)
+        prompt = build_prompt(prompt_type, custom_prompt, find_term, include_caption)
         
-        # Run OCR inference
-        text = backend.infer(prompt=prompt, image_path=tmp_file)
+        # Run OCR inference (pass advanced parameters to backend)
+        text = backend.infer(
+            prompt=prompt,
+            image_path=tmp_file,
+            base_size=base_size,
+            image_size=image_size,
+            crop_mode=crop_mode
+        )
         
         # Parse bounding boxes if grounding markers present
         boxes = parse_detections(text, orig_w, orig_h) if "<|det|>" in text else []
@@ -589,7 +645,7 @@ async def pdf_to_images_endpoint(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     # Get port from environment variable or use default
-    port = int(os.environ.get("PORT", 8001))
+    port = config("PORT", default=8001, cast=int)
     
     # Display startup banner
     print(f"\n{'=' * 50}")

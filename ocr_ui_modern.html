@@ -1074,6 +1074,235 @@
             gap: 6px;
         }
 
+        /* Advanced Settings */
+        .advanced-settings {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .advanced-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .advanced-header:hover {
+            background: var(--light);
+        }
+
+        .advanced-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .advanced-toggle {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .advanced-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        .advanced-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .advanced-content.active {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .setting-group {
+            margin-bottom: 24px;
+        }
+
+        .setting-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .setting-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .setting-hint {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .slider-container {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50%, var(--border) 50%, var(--border) 100%);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .checkbox-group:hover {
+            background: #e5e7eb;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label {
+            flex: 1;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: var(--border);
+            border-color: var(--text-light);
+        }
+
+        /* View Toggle Buttons */
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 4px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .view-btn {
+            flex: 1;
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .result-html {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .result-html table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .result-html th,
+        .result-html td {
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .result-html th {
+            background: var(--light);
+            font-weight: 600;
+        }
+
+        .result-html tr:hover {
+            background: var(--light);
+        }
+
         .log-container {
             background: white;
             border: 1px solid var(--border);
@@ -1264,6 +1493,67 @@
                         <div class="mode-name">自定义提示</div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Advanced Settings -->
+        <div class="advanced-settings">
+            <div class="advanced-header" id="advancedHeader">
+                <div class="advanced-title">
+                    <span>⚙️</span>
+                    <span data-i18n="advancedSettings.title">高级设置</span>
+                </div>
+                <span class="advanced-toggle">▼</span>
+            </div>
+            <div class="advanced-content" id="advancedContent">
+                <!-- Base Size Setting -->
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <span data-i18n="advancedSettings.baseSize.label">基础分辨率 (Base Size)</span>
+                        <span class="setting-value" id="baseSizeValue">1024</span>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="baseSize" class="slider" min="512" max="2048" step="128" value="1024">
+                    </div>
+                    <div class="setting-hint" data-i18n="advancedSettings.baseSize.hint">图像处理的基础分辨率。数值越高，质量越好但速度越慢。推荐：1024</div>
+                </div>
+
+                <!-- Image Size Setting -->
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <span data-i18n="advancedSettings.imageSize.label">切片大小 (Image Size)</span>
+                        <span class="setting-value" id="imageSizeValue">640</span>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="imageSize" class="slider" min="320" max="1280" step="64" value="640">
+                    </div>
+                    <div class="setting-hint" data-i18n="advancedSettings.imageSize.hint">动态裁剪的切片大小。影响内存使用。推荐：640</div>
+                </div>
+
+                <!-- Crop Mode Setting -->
+                <div class="setting-group">
+                    <div class="checkbox-group" onclick="document.getElementById('cropMode').click()">
+                        <input type="checkbox" id="cropMode" class="checkbox-input" checked>
+                        <div>
+                            <div class="checkbox-label" data-i18n="advancedSettings.cropMode.label">启用裁剪模式</div>
+                            <div class="setting-hint" data-i18n="advancedSettings.cropMode.hint">对大图进行动态裁剪，提高识别精度</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Include Caption Setting -->
+                <div class="setting-group">
+                    <div class="checkbox-group" onclick="document.getElementById('includeCaption').click()">
+                        <input type="checkbox" id="includeCaption" class="checkbox-input">
+                        <div>
+                            <div class="checkbox-label" data-i18n="advancedSettings.includeCaption.label">包含图像描述</div>
+                            <div class="setting-hint" data-i18n="advancedSettings.includeCaption.hint">在识别结果中添加图像的详细描述</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button class="reset-btn" id="resetAdvanced" data-i18n="advancedSettings.reset">重置默认值</button>
             </div>
         </div>
 
@@ -1469,6 +1759,12 @@
                         </button>
                     </div>
                 </div>
+                <!-- View Toggle -->
+                <div class="view-toggle" id="viewToggle" style="display: none;">
+                    <button class="view-btn active" data-view="formatted" data-i18n="viewToggle.formatted">格式化</button>
+                    <button class="view-btn" data-view="raw" data-i18n="viewToggle.raw">原始文本</button>
+                    <button class="view-btn" data-view="html" data-i18n="viewToggle.html">HTML 渲染</button>
+                </div>
                 <div class="result-text" id="resultText"></div>
             </div>
 
@@ -1622,12 +1918,250 @@
             logCount: document.getElementById('logCount')
         };
 
+        // Advanced Settings State
+        const advancedSettings = {
+            baseSize: 1024,
+            imageSize: 640,
+            cropMode: true,
+            includeCaption: false
+        };
+
+        // Load settings from localStorage
+        function loadAdvancedSettings() {
+            const saved = localStorage.getItem('deepseek_ocr_advanced_settings');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    Object.assign(advancedSettings, parsed);
+                } catch (e) {
+                    console.error('Failed to load advanced settings:', e);
+                }
+            }
+            updateAdvancedUI();
+        }
+
+        // Save settings to localStorage
+        function saveAdvancedSettings() {
+            localStorage.setItem('deepseek_ocr_advanced_settings', JSON.stringify(advancedSettings));
+        }
+
+        // Update UI with current settings
+        function updateAdvancedUI() {
+            document.getElementById('baseSize').value = advancedSettings.baseSize;
+            document.getElementById('baseSizeValue').textContent = advancedSettings.baseSize;
+            document.getElementById('imageSize').value = advancedSettings.imageSize;
+            document.getElementById('imageSizeValue').textContent = advancedSettings.imageSize;
+            document.getElementById('cropMode').checked = advancedSettings.cropMode;
+            document.getElementById('includeCaption').checked = advancedSettings.includeCaption;
+            updateSliderBackground('baseSize');
+            updateSliderBackground('imageSize');
+        }
+
+        // Update slider background gradient
+        function updateSliderBackground(sliderId) {
+            const slider = document.getElementById(sliderId);
+            const min = parseFloat(slider.min);
+            const max = parseFloat(slider.max);
+            const val = parseFloat(slider.value);
+            const percentage = ((val - min) / (max - min)) * 100;
+            slider.style.background = `linear-gradient(to right, var(--primary) 0%, var(--primary) ${percentage}%, var(--border) ${percentage}%, var(--border) 100%)`;
+        }
+
+        // Setup Advanced Settings
+        function setupAdvancedSettings() {
+            const header = document.getElementById('advancedHeader');
+            const content = document.getElementById('advancedContent');
+            const toggle = header.querySelector('.advanced-toggle');
+            const baseSize = document.getElementById('baseSize');
+            const imageSize = document.getElementById('imageSize');
+            const cropMode = document.getElementById('cropMode');
+            const includeCaption = document.getElementById('includeCaption');
+            const resetBtn = document.getElementById('resetAdvanced');
+
+            // Toggle panel
+            header.addEventListener('click', () => {
+                content.classList.toggle('active');
+                toggle.classList.toggle('active');
+            });
+
+            // Base Size slider
+            baseSize.addEventListener('input', (e) => {
+                advancedSettings.baseSize = parseInt(e.target.value);
+                document.getElementById('baseSizeValue').textContent = advancedSettings.baseSize;
+                updateSliderBackground('baseSize');
+                saveAdvancedSettings();
+            });
+
+            // Image Size slider
+            imageSize.addEventListener('input', (e) => {
+                advancedSettings.imageSize = parseInt(e.target.value);
+                document.getElementById('imageSizeValue').textContent = advancedSettings.imageSize;
+                updateSliderBackground('imageSize');
+                saveAdvancedSettings();
+            });
+
+            // Crop Mode checkbox
+            cropMode.addEventListener('change', (e) => {
+                advancedSettings.cropMode = e.target.checked;
+                saveAdvancedSettings();
+            });
+
+            // Include Caption checkbox
+            includeCaption.addEventListener('change', (e) => {
+                advancedSettings.includeCaption = e.target.checked;
+                saveAdvancedSettings();
+            });
+
+            // Reset button
+            resetBtn.addEventListener('click', () => {
+                advancedSettings.baseSize = 1024;
+                advancedSettings.imageSize = 640;
+                advancedSettings.cropMode = true;
+                advancedSettings.includeCaption = false;
+                updateAdvancedUI();
+                saveAdvancedSettings();
+                showToast(t('toast.clearSuccess') + ' - ' + t('advancedSettings.reset'), 'success');
+            });
+
+            // Load saved settings
+            loadAdvancedSettings();
+        }
+
+        // Get advanced settings as FormData additions
+        function appendAdvancedSettings(formData) {
+            formData.append('base_size', advancedSettings.baseSize);
+            formData.append('image_size', advancedSettings.imageSize);
+            formData.append('crop_mode', advancedSettings.cropMode);
+            formData.append('include_caption', advancedSettings.includeCaption);
+        }
+
+        // Parameter Validation
+        function validateAdvancedSettings() {
+            const errors = [];
+            
+            if (advancedSettings.baseSize < 512 || advancedSettings.baseSize > 2048) {
+                errors.push(`Base Size must be between 512 and 2048 (current: ${advancedSettings.baseSize})`);
+            }
+            
+            if (advancedSettings.imageSize < 224 || advancedSettings.imageSize > 1280) {
+                errors.push(`Image Size must be between 224 and 1280 (current: ${advancedSettings.imageSize})`);
+            }
+            
+            if (errors.length > 0) {
+                showToast(`Validation Error: ${errors.join(', ')}`, 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // HTML Detection and Rendering
+        let currentView = 'formatted';
+        let currentResultData = { text: '', rawText: '', hasHTML: false };
+
+        function detectHTML(text) {
+            // Check for HTML tags (especially tables which DeepSeek-OCR outputs)
+            return /<\s*(table|html|div|p|span|h[1-6]|ul|ol|li)\s*[^>]*>/i.test(text);
+        }
+
+        function sanitizeHTML(html) {
+            // Basic XSS prevention - remove script and dangerous tags
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            
+            // Remove script tags
+            const scripts = temp.querySelectorAll('script, iframe, object, embed');
+            scripts.forEach(el => el.remove());
+            
+            // Remove dangerous attributes
+            const allElements = temp.querySelectorAll('*');
+            allElements.forEach(el => {
+                Array.from(el.attributes).forEach(attr => {
+                    if (attr.name.startsWith('on')) {
+                        el.removeAttribute(attr.name);
+                    }
+                });
+            });
+            
+            return temp.innerHTML;
+        }
+
+        function displayResult(text, rawText = '') {
+            currentResultData.text = text;
+            currentResultData.rawText = rawText || text;
+            currentResultData.hasHTML = detectHTML(text);
+            
+            const viewToggle = document.getElementById('viewToggle');
+            const resultText = document.getElementById('resultText');
+            
+            // Show view toggle only if HTML detected
+            if (currentResultData.hasHTML) {
+                viewToggle.style.display = 'flex';
+            } else {
+                viewToggle.style.display = 'none';
+            }
+            
+            // Display based on current view
+            updateResultView();
+        }
+
+        function updateResultView() {
+            const resultText = document.getElementById('resultText');
+            const text = currentResultData.text;
+            const rawText = currentResultData.rawText;
+            
+            switch (currentView) {
+                case 'formatted':
+                    // Clean text without HTML
+                    resultText.className = 'result-text';
+                    resultText.textContent = text;
+                    break;
+                    
+                case 'raw':
+                    // Show raw text with all markers
+                    resultText.className = 'result-text';
+                    resultText.textContent = rawText;
+                    break;
+                    
+                case 'html':
+                    // Render HTML (if present)
+                    resultText.className = 'result-text result-html';
+                    if (currentResultData.hasHTML) {
+                        resultText.innerHTML = sanitizeHTML(text);
+                    } else {
+                        resultText.textContent = text;
+                    }
+                    break;
+            }
+        }
+
+        function setupViewToggle() {
+            const viewToggle = document.getElementById('viewToggle');
+            const buttons = viewToggle.querySelectorAll('.view-btn');
+            
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const view = btn.dataset.view;
+                    currentView = view;
+                    
+                    // Update active state
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Update display
+                    updateResultView();
+                });
+            });
+        }
+
         // Initialize
         function init() {
             setupModeSelector();
             setupUpload();
             setupButtons();
             setupDragAndDrop();
+            setupAdvancedSettings();
+            setupViewToggle();
             
             // 显示日志区域
             elements.logSection.classList.add('active');
@@ -2340,6 +2874,11 @@
                 });
                 return;
             }
+            
+            // Validate advanced settings
+            if (!validateAdvancedSettings()) {
+                return;
+            }
 
             const startTime = Date.now();
             state.isProcessing = true;
@@ -2458,6 +2997,9 @@
             
             // 可选：添加 grounding 参数
             formData.append('grounding', state.mode === 'find' || state.mode === 'document' || state.mode === 'ocr');
+            
+            // Add advanced settings
+            appendAdvancedSettings(formData);
 
             const response = await fetch(`${CONFIG.apiUrl}/ocr`, {
                 method: 'POST',
@@ -2475,6 +3017,9 @@
                 image.boxes = data.boxes;
                 image.imageDims = data.image_dims;
             }
+            
+            // Store raw text for later use
+            image.rawText = data.raw_text || data.text;
 
             return data.text;
         }
@@ -2566,6 +3111,11 @@
                 showToast('请先上传图片', 'error');
                 return;
             }
+            
+            // Validate advanced settings
+            if (!validateAdvancedSettings()) {
+                return;
+            }
 
             addLog('开始查找定位', 'info', `正在图片中查找: ${findTerm}`, {
                 '查找词': findTerm,
@@ -2579,6 +3129,9 @@
                 formData.append('prompt_type', 'find');
                 formData.append('find_term', findTerm);
                 formData.append('grounding', true);
+                
+                // Add advanced settings
+                appendAdvancedSettings(formData);
 
                 const response = await fetch(`${CONFIG.apiUrl}/ocr`, {
                     method: 'POST',
@@ -2593,7 +3146,7 @@
 
                 // 显示结果
                 elements.resultSection.classList.add('active');
-                elements.resultText.textContent = data.text || '未找到匹配内容';
+                displayResult(data.text || '未找到匹配内容', data.raw_text || data.text);
 
                 // 绘制边界框
                 if (data.boxes && data.boxes.length > 0) {
@@ -2662,7 +3215,12 @@
                 return `${separator}\n图片 ${index + 1}: ${result.name}\n${separator}\n\n${result.text}\n\n`;
             }).join('\n');
 
-            elements.resultText.textContent = mergedText;
+            const mergedRawText = state.results.map((result, index) => {
+                const separator = '='.repeat(60);
+                return `${separator}\n图片 ${index + 1}: ${result.name}\n${separator}\n\n${result.rawText || result.text}\n\n`;
+            }).join('\n');
+
+            displayResult(mergedText, mergedRawText);
         }
 
         // Copy Result

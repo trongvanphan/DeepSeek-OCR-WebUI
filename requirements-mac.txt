@@ -33,3 +33,6 @@ numpy<2.0,>=1.23.2
 
 # Optional: ModelScope fallback
 modelscope>=1.9.0
+
+# Configuration management
+python-decouple==3.8
