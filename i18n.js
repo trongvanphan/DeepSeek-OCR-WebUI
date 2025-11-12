@@ -752,8 +752,8 @@ const translations = {
     }
 };
 
-// Current language
-let currentLang = localStorage.getItem('ocr_language') || 'zh-CN';
+// Current language - Default to English
+let currentLang = localStorage.getItem('ocr_language') || 'en-US';
 
 // Get translation
 function t(path) {

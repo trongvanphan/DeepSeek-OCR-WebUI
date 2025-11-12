@@ -248,8 +248,14 @@ frontends_path = Path(__file__).parent / "frontends"
 if frontends_path.exists():
     app.mount("/frontends", StaticFiles(directory=str(frontends_path)), name="frontends")
 
+# Mount root-level static files (i18n.js, assets/, etc.) but NOT the root "/"
+# This avoids conflicts with API routes
+root_static_path = Path(__file__).parent
+app.mount("/static", StaticFiles(directory=str(root_static_path)), name="root_static")
+
+
 # ==============================================================================
-# Prompt Engineering
+# Main Entry Point
 # ==============================================================================
 
 def load_custom_prompt_from_yaml(yaml_file: str = "custom_prompt.yaml") -> Optional[str]:

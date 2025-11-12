@@ -1,38 +1,79 @@
-// DeepSeek OCR main JavaScript
-// Extracted from ocr_ui_refactored.html
-// ...existing code from <script>...</script> in ocr_ui_refactored.html...// DeepSeek OCR main JavaScript
-// Extracted from ocr_ui_refactored.html
+        // ====================================
+        // Using external i18n.js for translations
+        // i18n functions: t(), switchLanguage(), updateUILanguage(), initI18n()
+        // ====================================
+        
+        // Helper functions to access i18n (will be available after i18n.js loads)
+        const t = (key, params) => window.i18n?.t(key, params);
+        const switchLanguage = (lang) => window.i18n?.switchLanguage(lang);
+        const updateUILanguage = () => window.i18n?.updateUILanguage();
+        const initI18n = () => window.i18n?.initI18n();
+        const getCurrentLang = () => window.i18n?.getCurrentLang() || 'en-US';
+        let currentLang = 'en-US';
+        
+        // Custom UI language updater that extends the base i18n functionality
+        function customUpdateUILanguage() {
+            currentLang = getCurrentLang();
+            if (window.i18n?.updateUILanguage) {
+                window.i18n.updateUILanguage();
+            }
+        }
 
-// ====================================
-// App.js - Main Application Logic
-// This file contains remaining functionality not in modules
-// Depends on: config.js, state.js, utils.js, dom.js, toast.js, validation.js,
-//             advanced-settings.js, html-rendering.js, logs.js, mode-selector.js, templates.js
-// ====================================
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
 
-// Use window.i18n from external i18n.js
-const t = window.i18n.t;
-const switchLanguage = window.i18n.switchLanguage;
-const updateUILanguage = window.i18n.updateUILanguage;
-const initI18n = window.i18n.initI18n;
-let currentLang = window.i18n.getCurrentLang();
+        // ====================================
+        // Configuration
+        const CONFIG = {
+            apiUrl: window.location.origin || 'http://localhost:8001',
+            maxConcurrent: 1 // 逐一处理
+        };
 
-// Custom UI language updater that extends the base i18n functionality
-const originalUpdateUILanguage = updateUILanguage;
-function customUpdateUILanguage() {
-    currentLang = window.i18n.getCurrentLang();
-    originalUpdateUILanguage();
-}
+        // State
+        const state = {
+            mode: 'document',
+            images: [],
+            results: [],
+            isProcessing: false,
+            singleImage: null  // 用于 Find 模式的单图
+        };
 
-// Note: advancedSettings, loadAdvancedSettings, saveAdvancedSettings, updateAdvancedUI,
-// updateSliderBackground, setupAdvancedSettings, appendAdvancedSettings, validateAdvancedSettings
-// are defined in advanced-settings.js
+        // DOM Elements
+        const elements = {
+            uploadArea: document.getElementById('uploadArea'),
+            fileInput: document.getElementById('fileInput'),
+            imagesSection: document.getElementById('imagesSection'),
+            imagesGrid: document.getElementById('imagesGrid'),
+            imageCount: document.getElementById('imageCount'),
+            processBtn: document.getElementById('processBtn'),
+            addMoreBtn: document.getElementById('addMoreBtn'),
+            clearBtn: document.getElementById('clearBtn'),
+            progressSection: document.getElementById('progressSection'),
+            progressBar: document.getElementById('progressBar'),
+            processedCount: document.getElementById('processedCount'),
+            totalCount: document.getElementById('totalCount'),
+            resultSection: document.getElementById('resultSection'),
+            resultText: document.getElementById('resultText'),
+            copyBtn: document.getElementById('copyBtn'),
+            downloadBtn: document.getElementById('downloadBtn'),
+            toast: document.getElementById('toast'),
+            toastIcon: document.getElementById('toastIcon'),
+            toastMessage: document.getElementById('toastMessage'),
+            logSection: document.getElementById('logSection'),
+            logContent: document.getElementById('logContent'),
+            logCount: document.getElementById('logCount')
+        };
 
-// Note: detectHTML, sanitizeHTML, displayResult, updateResultView, setupViewToggle
-// are defined in html-rendering.js
+        // Advanced Settings State
+        const advancedSettings = {
+            baseSize: 1024,
+            imageSize: 640,
+            cropMode: true,
+            includeCaption: false
+        };
 
-// Upload Setup
-function setupUpload() {
+        // Load settings from localStorage
+        function loadAdvancedSettings() {
             const saved = localStorage.getItem('deepseek_ocr_advanced_settings');
             if (saved) {
                 try {
@@ -1966,9 +2007,11 @@ function setupUpload() {
         // Initialize i18n from external i18n.js
         if (window.i18n && window.i18n.initI18n) {
             window.i18n.initI18n();
+            currentLang = getCurrentLang();
         }
         
         // Apply initial language
         if (window.i18n && window.i18n.updateUILanguage) {
             window.i18n.updateUILanguage();
         }
+    });

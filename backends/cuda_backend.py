@@ -2,6 +2,13 @@
 import os
 from transformers import AutoProcessor, AutoModel
 import torch
+import warnings
+
+# Suppress specific warnings
+warnings.filterwarnings('ignore', message='.*position_ids.*position_embeddings.*')
+warnings.filterwarnings('ignore', message='.*exceed the model.*predefined maximum length.*')
+warnings.filterwarnings('ignore', message='.*attention_mask.*pad_token_id.*')
+os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 class CUDABackend:
     def __init__(self, model_path: str = "deepseek-ai/DeepSeek-OCR"):
@@ -9,6 +16,7 @@ class CUDABackend:
         self.revision = "1e3401a3d4603e9e71ea0ec850bfead602191ec4"  # MPS support commit
         self.model = None
         self.processor = None
+        self.max_length = 8192  # Model's maximum length
         
     def load_model(self, source: str = "huggingface", timeout: int = 300):
         """Load CUDA model"""
@@ -36,6 +44,12 @@ class CUDABackend:
                 trust_remote_code=True
             )
             
+            # Set processor/tokenizer max length and pad token
+            if hasattr(self.processor, 'model_max_length'):
+                self.processor.model_max_length = self.max_length
+            if hasattr(self.processor, 'pad_token_id') and self.processor.pad_token_id is None:
+                self.processor.pad_token_id = self.processor.eos_token_id
+            
             self.model = AutoModel.from_pretrained(
                 model_path,
                 revision=revision,
@@ -43,6 +57,13 @@ class CUDABackend:
                 torch_dtype=torch.bfloat16,
                 low_cpu_mem_usage=True
             ).to("cuda")
+            
+            # Configure generation settings if available
+            if hasattr(self.model, 'generation_config'):
+                if hasattr(self.model.generation_config, 'max_length'):
+                    self.model.generation_config.max_length = self.max_length
+                if hasattr(self.model.generation_config, 'pad_token_id'):
+                    self.model.generation_config.pad_token_id = self.processor.eos_token_id
             
             self.model.eval()
             print(f"✅ Model loaded on CUDA from {source}")

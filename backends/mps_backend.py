@@ -3,6 +3,13 @@ from typing import Optional
 from transformers import AutoProcessor, AutoModel
 import torch
 import platform
+import warnings
+import os
+
+# Suppress specific warnings
+warnings.filterwarnings('ignore', message='.*position_ids.*position_embeddings.*')
+warnings.filterwarnings('ignore', message='.*exceed the model.*predefined maximum length.*')
+os.environ['TOKENIZERS_PARALLELISM'] = 'false'  # Suppress tokenizers warning
 
 class MPSBackend:
     def __init__(self, model_path: str = "deepseek-ai/DeepSeek-OCR"):
@@ -11,6 +18,7 @@ class MPSBackend:
         self.model = None
         self.processor = None
         self.device = "mps"
+        self.max_length = 8192  # Model's maximum length
         
     def load_model(self):
         """Load model with MPS acceleration"""
@@ -23,6 +31,12 @@ class MPSBackend:
                 trust_remote_code=True
             )
             
+            # Set processor/tokenizer max length
+            if hasattr(self.processor, 'model_max_length'):
+                self.processor.model_max_length = self.max_length
+            if hasattr(self.processor, 'pad_token_id') and self.processor.pad_token_id is None:
+                self.processor.pad_token_id = self.processor.eos_token_id
+            
             self.model = AutoModel.from_pretrained(
                 self.model_path,
                 revision=self.revision,
@@ -32,6 +46,14 @@ class MPSBackend:
             ).to(self.device)
             
             self.model.eval()
+            
+            # Configure generation settings if available
+            if hasattr(self.model, 'generation_config'):
+                if hasattr(self.model.generation_config, 'max_length'):
+                    self.model.generation_config.max_length = self.max_length
+                if hasattr(self.model.generation_config, 'pad_token_id'):
+                    self.model.generation_config.pad_token_id = self.processor.eos_token_id
+            
             print(f"✅ Model loaded on {self.device}")
             return True
             
