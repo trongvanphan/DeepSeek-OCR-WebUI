@@ -1,0 +1,210 @@
+/* ============================================
+   Logs Display
+   ============================================ */
+
+.logs-section {
+    padding: 40px;
+    background: var(--light);
+    border-top: 1px solid var(--border);
+}
+
+.logs-container {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border);
+}
+
+.logs-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.logs-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.log-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--border);
+    background: white;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.filter-btn:hover {
+    background: var(--light);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.logs-list {
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    background: var(--light);
+    border-radius: var(--radius);
+}
+
+.log-entry {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: var(--radius);
+    border-left: 4px solid var(--border);
+    background: white;
+    animation: slideInLog 0.3s ease-out;
+    transition: all 0.3s;
+}
+
+.log-entry:hover {
+    box-shadow: 0 4px 12px var(--shadow);
+    transform: translateX(5px);
+}
+
+.log-entry.info {
+    border-left-color: var(--primary);
+}
+
+.log-entry.success {
+    border-left-color: var(--success);
+}
+
+.log-entry.warning {
+    border-left-color: #f59e0b;
+}
+
+.log-entry.error {
+    border-left-color: var(--danger);
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.log-type {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.log-entry.info .log-type {
+    color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.log-entry.success .log-type {
+    color: var(--success);
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.log-entry.warning .log-type {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.log-entry.error .log-type {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.log-time {
+    font-size: 0.85em;
+    color: var(--text-light);
+}
+
+.log-message {
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.log-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 0.9em;
+    color: var(--text-light);
+    font-family: 'Courier New', monospace;
+}
+
+.empty-logs {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+}
+
+.empty-logs-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-logs-text {
+    font-size: 1.1em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .logs-section {
+        padding: 20px;
+    }
+
+    .logs-container {
+        padding: 15px;
+    }
+
+    .logs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .logs-controls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .log-filters {
+        flex-direction: column;
+    }
+
+    .filter-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .log-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}

@@ -32,6 +32,7 @@ from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from PIL import Image, ImageOps
 import uvicorn
@@ -242,6 +243,11 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
+# Mount static files for refactored frontend assets
+frontends_path = Path(__file__).parent / "frontends"
+if frontends_path.exists():
+    app.mount("/frontends", StaticFiles(directory=str(frontends_path)), name="frontends")
+
 # ==============================================================================
 # Prompt Engineering
 # ==============================================================================
@@ -421,14 +427,19 @@ async def root():
     Returns:
         HTML content of the OCR web interface
     """
-    ui_file = Path(__file__).parent / "ocr_ui_modern.html"
+    # Use refactored HTML with external CSS files
+    ui_file = Path(__file__).parent / "ocr_ui_refactored.html"
+    
+    # Fallback to original if refactored version doesn't exist
+    if not ui_file.exists():
+        ui_file = Path(__file__).parent / "ocr_ui_modern.html"
     
     if ui_file.exists():
         return HTMLResponse(content=ui_file.read_text(encoding='utf-8'))
     
     # Fallback if UI file is missing
     return HTMLResponse(
-        content="<h1>DeepSeek-OCR</h1><p>UI file not found. Please ensure ocr_ui_modern.html exists.</p>",
+        content="<h1>DeepSeek-OCR</h1><p>UI file not found. Please ensure ocr_ui_refactored.html or ocr_ui_modern.html exists.</p>",
         status_code=404
     )
 
