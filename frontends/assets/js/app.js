@@ -1,3 +1,8 @@
+// DeepSeek OCR main JavaScript
+// Extracted from ocr_ui_refactored.html
+// ...existing code from <script>...</script> in ocr_ui_refactored.html...// DeepSeek OCR main JavaScript
+// Extracted from ocr_ui_refactored.html
+
 // ====================================
 // App.js - Main Application Logic
 // This file contains remaining functionality not in modules
